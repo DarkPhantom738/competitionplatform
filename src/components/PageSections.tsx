@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { getFeaturedInterviews } from "@/data/interviews";
-import { getRecentStories } from "@/data/stories";
+import { getFeaturedStories, getRecentStories } from "@/data/stories";
 import { ArticleFeed } from "./ArticleFeed";
 import { Hero } from "./Hero";
 import { Sidebar } from "./Sidebar";
@@ -8,6 +8,7 @@ import { Sidebar } from "./Sidebar";
 export function HomePage() {
   const recentStories = getRecentStories(10);
   const featuredInterview = getFeaturedInterviews()[0];
+  const featuredStory = getFeaturedStories()[0];
 
   return (
     <>
@@ -27,7 +28,11 @@ export function HomePage() {
             </div>
           </div>
 
-          <Sidebar featuredInterview={featuredInterview} showAbout />
+          <Sidebar
+            featuredInterview={featuredInterview}
+            featuredStory={featuredStory}
+            showAbout
+          />
         </div>
       </section>
     </>

@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 import { StoryFilters } from "@/components/StoryFilters";
 import { Sidebar } from "@/components/Sidebar";
+import { getFeaturedInterviews } from "@/data/interviews";
+import { getFeaturedStories } from "@/data/stories";
 
 export const metadata: Metadata = {
   title: "Explore Stories",
@@ -9,6 +11,9 @@ export const metadata: Metadata = {
 };
 
 export default function ExplorePage() {
+  const featuredInterview = getFeaturedInterviews()[0];
+  const featuredStory = getFeaturedStories()[0];
+
   return (
     <section className="page-container py-10 sm:py-12">
       <div className="layout-with-sidebar">
@@ -24,7 +29,11 @@ export default function ExplorePage() {
           </div>
         </div>
 
-        <Sidebar showAbout />
+        <Sidebar
+          featuredInterview={featuredInterview}
+          featuredStory={featuredStory}
+          showAbout
+        />
       </div>
     </section>
   );

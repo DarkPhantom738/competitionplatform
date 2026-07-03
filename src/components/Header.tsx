@@ -23,7 +23,7 @@ export function Header() {
           href="/"
           className="font-serif text-lg font-semibold text-ink hover:text-accent transition-colors"
         >
-          Competition Stories
+          Beyond the Medal
         </Link>
 
         <nav className="hidden items-center gap-6 md:flex">

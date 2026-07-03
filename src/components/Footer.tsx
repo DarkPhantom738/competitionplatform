@@ -7,7 +7,7 @@ export function Footer() {
         <div className="flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
           <div>
             <Link href="/" className="font-serif text-base font-semibold text-ink">
-              Competition Stories
+              Beyond the Medal
             </Link>
             <p className="mt-2 max-w-xs text-sm leading-relaxed text-ink-muted">
               Honest experiences from high school competitors. Written and run by students.
@@ -19,12 +19,12 @@ export function Footer() {
             <Link href="/submit" className="hover:text-ink">Submit</Link>
             <Link href="/explore" className="hover:text-ink">Stories</Link>
             <Link href="/interviews" className="hover:text-ink">Interviews</Link>
-            <a href="mailto:hello@competitionstories.org" className="hover:text-ink">Contact</a>
+            <a href="mailto:hello@beyondthemedal.org" className="hover:text-ink">Contact</a>
           </div>
         </div>
 
         <p className="mt-8 text-xs text-ink-faint">
-          © {new Date().getFullYear()} Competition Stories. All submissions are moderated before publishing.
+          © {new Date().getFullYear()} Beyond the Medal. All submissions are moderated before publishing.
         </p>
       </div>
     </footer>

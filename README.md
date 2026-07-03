@@ -1,4 +1,4 @@
-# Competition Stories
+# Beyond the Medal
 
 A student-run publication for honest high school competition experiences — interviews, written stories, and reflections from students who actually competed.
 

@@ -11,6 +11,8 @@ export interface Interview {
   duration: string;
   featured?: boolean;
   youtubeId?: string;
+  /** Set to true when ready to publish. Template entries stay in code with published: false. */
+  published: boolean;
 }
 
 export const interviews: Interview[] = [
@@ -26,6 +28,7 @@ export const interviews: Interview[] = [
     duration: "18 min",
     featured: true,
     youtubeId: "dQw4w9WgXcQ",
+    published: false,
   },
   {
     slug: "usaco-bronze-to-gold",
@@ -39,6 +42,7 @@ export const interviews: Interview[] = [
     duration: "22 min",
     featured: true,
     youtubeId: "dQw4w9WgXcQ",
+    published: false,
   },
   {
     slug: "isef-without-winning",
@@ -52,6 +56,7 @@ export const interviews: Interview[] = [
     duration: "16 min",
     featured: true,
     youtubeId: "dQw4w9WgXcQ",
+    published: false,
   },
   {
     slug: "deca-roleplay-nerves",
@@ -65,6 +70,7 @@ export const interviews: Interview[] = [
     duration: "14 min",
     featured: false,
     youtubeId: "dQw4w9WgXcQ",
+    published: false,
   },
   {
     slug: "scio-ly-captain",
@@ -78,6 +84,7 @@ export const interviews: Interview[] = [
     duration: "20 min",
     featured: false,
     youtubeId: "dQw4w9WgXcQ",
+    published: false,
   },
   {
     slug: "debate-circuit-life",
@@ -91,6 +98,7 @@ export const interviews: Interview[] = [
     duration: "24 min",
     featured: false,
     youtubeId: "dQw4w9WgXcQ",
+    published: false,
   },
   {
     slug: "first-hackathon-story",
@@ -104,6 +112,7 @@ export const interviews: Interview[] = [
     duration: "12 min",
     featured: false,
     youtubeId: "dQw4w9WgXcQ",
+    published: false,
   },
   {
     slug: "amc-aime-prep",
@@ -117,17 +126,22 @@ export const interviews: Interview[] = [
     duration: "19 min",
     featured: false,
     youtubeId: "dQw4w9WgXcQ",
+    published: false,
   },
 ];
 
 export function getInterview(slug: string): Interview | undefined {
-  return interviews.find((i) => i.slug === slug);
+  return interviews.find((i) => i.slug === slug && i.published);
+}
+
+export function getPublishedInterviews(): Interview[] {
+  return interviews.filter((i) => i.published);
 }
 
 export function getInterviewsByCompetition(competitionSlug: string): Interview[] {
-  return interviews.filter((i) => i.competitionSlug === competitionSlug);
+  return interviews.filter((i) => i.competitionSlug === competitionSlug && i.published);
 }
 
 export function getFeaturedInterviews(): Interview[] {
-  return interviews.filter((i) => i.featured);
+  return interviews.filter((i) => i.featured && i.published);
 }

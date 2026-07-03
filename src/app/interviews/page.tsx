@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { InterviewFeed } from "@/components/InterviewFeed";
 import { Sidebar } from "@/components/Sidebar";
-import { interviews } from "@/data/interviews";
+import { getFeaturedInterviews, getPublishedInterviews } from "@/data/interviews";
+import { getFeaturedStories } from "@/data/stories";
 
 export const metadata: Metadata = {
   title: "Interviews",
@@ -9,6 +10,10 @@ export const metadata: Metadata = {
 };
 
 export default function InterviewsPage() {
+  const publishedInterviews = getPublishedInterviews();
+  const featuredInterview = getFeaturedInterviews()[0];
+  const featuredStory = getFeaturedStories()[0];
+
   return (
     <section className="page-container py-10 sm:py-12">
       <div className="layout-with-sidebar">
@@ -18,11 +23,15 @@ export default function InterviewsPage() {
             Conversations with students about what competitions actually felt like.
           </p>
           <div className="mt-8">
-            <InterviewFeed interviews={interviews} />
+            <InterviewFeed interviews={publishedInterviews} />
           </div>
         </div>
 
-        <Sidebar showAbout />
+        <Sidebar
+          featuredInterview={featuredInterview}
+          featuredStory={featuredStory}
+          showAbout
+        />
       </div>
     </section>
   );

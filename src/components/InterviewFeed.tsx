@@ -29,9 +29,11 @@ export function InterviewRow({ interview }: { interview: Interview }) {
 export function InterviewFeed({ interviews }: { interviews: Interview[] }) {
   if (interviews.length === 0) {
     return (
-      <p className="py-12 text-center text-sm text-ink-muted">
-        No interviews yet.
-      </p>
+      <div className="flex min-h-[50vh] items-center justify-center py-16 sm:min-h-[55vh] sm:py-20">
+        <p className="max-w-xl text-center font-serif text-3xl font-bold leading-tight text-ink sm:text-4xl lg:text-5xl">
+          Interviews with some of you coming soon!
+        </p>
+      </div>
     );
   }
 

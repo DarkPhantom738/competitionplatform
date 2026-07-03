@@ -1,13 +1,16 @@
 import Link from "next/link";
 import type { Interview } from "@/data/interviews";
+import type { Story } from "@/data/stories";
 
 interface SidebarProps {
   featuredInterview?: Interview;
+  featuredStory?: Story;
   showAbout?: boolean;
 }
 
 export function Sidebar({
   featuredInterview,
+  featuredStory,
   showAbout = true,
 }: SidebarProps) {
   return (
@@ -29,6 +32,28 @@ export function Sidebar({
             </p>
             <span className="mt-2 inline-block text-sm text-link">
               Watch interview →
+            </span>
+          </Link>
+        </div>
+      )}
+
+      {!featuredInterview && featuredStory && (
+        <div>
+          <h2 className="text-xs font-semibold uppercase tracking-wide text-ink-faint">
+            Featured story
+          </h2>
+          <Link href={`/explore/${featuredStory.slug}`} className="mt-3 block group">
+            <p className="text-sm text-ink-muted">
+              {featuredStory.authorName} · {featuredStory.competitionTag}
+            </p>
+            <h3 className="mt-1 font-serif text-base font-semibold text-ink group-hover:text-accent transition-colors leading-snug">
+              {featuredStory.title}
+            </h3>
+            <p className="mt-2 text-sm text-ink-muted line-clamp-3 leading-relaxed">
+              {featuredStory.excerpt}
+            </p>
+            <span className="mt-2 inline-block text-sm text-link">
+              Read story →
             </span>
           </Link>
         </div>
@@ -63,8 +88,9 @@ export function Sidebar({
             About
           </h2>
           <p className="mt-3 text-sm leading-relaxed text-ink-muted">
-            Official sites tell you the rules. We collect honest firsthand accounts
-            from students about what competitions actually feel like.
+            Every competition has a winner, but every competitor has a story. At Beyond
+            the Medal, we believe that the most valuable lessons are independent of a
+            person&apos;s merit.
           </p>
           <Link href="/about" className="mt-2 inline-block text-sm text-link">
             Learn more →

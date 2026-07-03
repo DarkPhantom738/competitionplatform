@@ -5,11 +5,11 @@ import { Footer } from "@/components/Footer";
 
 export const metadata: Metadata = {
   title: {
-    default: "Competition Stories — Real experiences from high school competitors",
-    template: "%s | Competition Stories",
+    default: "Beyond the Medal — Real experiences from high school competitors",
+    template: "%s | Beyond the Medal",
   },
   description:
-    "Honest interviews and student-written experiences about high school competitions — from FTC and USACO to ISEF, DECA, debate, and more.",
+    "Honest reflections on every part of the competition experience — from FTC and USACO to ISEF, DECA, debate, and more.",
 };
 
 export default function RootLayout({
@@ -18,8 +18,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className="font-sans">
+    <html lang="en" suppressHydrationWarning>
+      <body className="font-sans" suppressHydrationWarning>
         <Header />
         <main className="min-h-screen">{children}</main>
         <Footer />

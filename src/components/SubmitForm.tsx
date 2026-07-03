@@ -1,23 +1,135 @@
 "use client";
 
 import { useState, FormEvent } from "react";
+import type { Domain, Grade } from "@/data/competitions";
+import {
+  buildParsedSubmission,
+  formatSubmissionEmail,
+  SUBMISSION_EMAIL,
+} from "@/lib/submissions";
 
 export function SubmitForm() {
-  const [submitted, setSubmitted] = useState(false);
+  const [formattedSubmission, setFormattedSubmission] = useState<string | null>(null);
+  const [emailSubject, setEmailSubject] = useState("");
+  const [emailSent, setEmailSent] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  function handleSubmit(e: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    setSubmitted(true);
+    setSubmitting(true);
+    setError(null);
+
+    const form = e.currentTarget;
+    const formData = new FormData(form);
+    const grade = String(formData.get("grade") ?? "") as Grade;
+    const domain = String(formData.get("domain") ?? "Academics") as Domain;
+
+    const payload = {
+      name: String(formData.get("name") ?? ""),
+      grade,
+      competition: String(formData.get("competition") ?? ""),
+      domain,
+      year: String(formData.get("year") ?? ""),
+      role: String(formData.get("role") ?? ""),
+      title: String(formData.get("title") ?? ""),
+      excerpt: String(formData.get("excerpt") ?? ""),
+      wentWell: String(formData.get("wentWell") ?? ""),
+      difficult: String(formData.get("difficult") ?? ""),
+      wishKnew: String(formData.get("wishKnew") ?? ""),
+      advice: String(formData.get("advice") ?? ""),
+    };
+
+    const submission = buildParsedSubmission({
+      ...payload,
+      role: payload.role || undefined,
+      excerpt: payload.excerpt || undefined,
+    });
+    const email = formatSubmissionEmail(submission);
+
+    try {
+      const response = await fetch("/api/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      const result = (await response.json()) as { error?: string };
+      if (!response.ok) {
+        setError(result.error ?? "Could not send submission. Try again.");
+        return;
+      }
+
+      setFormattedSubmission(email.text);
+      setEmailSubject(email.subject);
+      setEmailSent(true);
+      form.reset();
+    } catch {
+      setError("Could not reach the server. Try again.");
+    } finally {
+      setSubmitting(false);
+    }
   }
 
-  if (submitted) {
+  if (formattedSubmission) {
+    const mailto = `mailto:${SUBMISSION_EMAIL}?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(formattedSubmission)}`;
+
     return (
-      <div className="py-8 text-center">
+      <div className="py-4">
         <h3 className="font-serif text-xl font-semibold text-ink">Thanks for sharing</h3>
         <p className="mt-3 text-sm leading-relaxed text-ink-muted">
-          Your submission is in our review queue. We moderate every story before
-          publishing. You&apos;ll hear back within a week.
+          {emailSent ? (
+            <>
+              Your submission was emailed to{" "}
+              <a href={`mailto:${SUBMISSION_EMAIL}`} className="text-link">
+                {SUBMISSION_EMAIL}
+              </a>
+              . We review every story before publishing.
+            </>
+          ) : (
+            <>
+              Email the formatted submission below to{" "}
+              <a href={`mailto:${SUBMISSION_EMAIL}`} className="text-link">
+                {SUBMISSION_EMAIL}
+              </a>
+              . We review every story before publishing.
+            </>
+          )}
         </p>
+
+        <textarea
+          readOnly
+          value={formattedSubmission}
+          rows={16}
+          className="input-plain mt-6 w-full resize-y font-mono text-xs leading-relaxed"
+        />
+
+        <div className="mt-4 flex flex-wrap gap-3">
+          <button
+            type="button"
+            onClick={() => navigator.clipboard.writeText(formattedSubmission)}
+            className="border border-ink bg-ink px-5 py-2 text-sm font-medium text-white hover:bg-ink/90 transition-colors"
+          >
+            Copy submission
+          </button>
+          <a
+            href={mailto}
+            className="border border-border px-5 py-2 text-sm font-medium text-ink hover:bg-border-light transition-colors"
+          >
+            Open in email app
+          </a>
+          <button
+            type="button"
+            onClick={() => {
+              setFormattedSubmission(null);
+              setEmailSubject("");
+              setEmailSent(false);
+            }}
+            className="px-2 py-2 text-sm text-ink-muted hover:text-ink transition-colors"
+          >
+            Submit another
+          </button>
+        </div>
       </div>
     );
   }
@@ -28,6 +140,12 @@ export function SubmitForm() {
         All submissions are reviewed before publishing. Share what was real — the good,
         the hard, and what you wish someone had told you.
       </p>
+
+      {error && (
+        <p className="border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800">
+          {error}
+        </p>
+      )}
 
       <div className="grid gap-5 sm:grid-cols-2">
         <div>
@@ -56,21 +174,32 @@ export function SubmitForm() {
           <label htmlFor="competition" className="mb-1.5 block text-sm text-ink">
             Competition
           </label>
-          <input id="competition" name="competition" required className="input-plain" placeholder="e.g. FTC, USACO, Track" />
+          <input id="competition" name="competition" required className="input-plain" placeholder="e.g. FTC, USACO, AMC" />
         </div>
+        <div>
+          <label htmlFor="domain" className="mb-1.5 block text-sm text-ink">
+            Category
+          </label>
+          <select id="domain" name="domain" required className="select-plain w-full">
+            <option value="Academics">Academics</option>
+            <option value="Sports">Sports</option>
+          </select>
+        </div>
+      </div>
+
+      <div className="grid gap-5 sm:grid-cols-2">
         <div>
           <label htmlFor="year" className="mb-1.5 block text-sm text-ink">
             Year participated
           </label>
           <input id="year" name="year" required className="input-plain" placeholder="e.g. 2024–2025" />
         </div>
-      </div>
-
-      <div>
-        <label htmlFor="role" className="mb-1.5 block text-sm text-ink">
-          Role / result <span className="text-ink-faint">(optional)</span>
-        </label>
-        <input id="role" name="role" className="input-plain" placeholder="e.g. Team captain, qualified for states" />
+        <div>
+          <label htmlFor="role" className="mb-1.5 block text-sm text-ink">
+            Role / result <span className="text-ink-faint">(optional)</span>
+          </label>
+          <input id="role" name="role" className="input-plain" placeholder="e.g. Team captain, qualified for states" />
+        </div>
       </div>
 
       <div>
@@ -78,6 +207,19 @@ export function SubmitForm() {
           Story title
         </label>
         <input id="title" name="title" required className="input-plain" placeholder="What would you title your experience?" />
+      </div>
+
+      <div>
+        <label htmlFor="excerpt" className="mb-1.5 block text-sm text-ink">
+          Short preview <span className="text-ink-faint">(optional)</span>
+        </label>
+        <textarea
+          id="excerpt"
+          name="excerpt"
+          rows={2}
+          className="input-plain resize-y"
+          placeholder="One or two sentences for the story feed."
+        />
       </div>
 
       <div>
@@ -116,16 +258,17 @@ export function SubmitForm() {
           className="mt-1 h-4 w-4 border-border"
         />
         <span className="text-sm text-ink-muted leading-relaxed">
-          I give permission for Competition Stories to review, edit lightly for clarity,
+          I give permission for Beyond the Medal to review, edit lightly for clarity,
           and publish my submission. I confirm this is my honest experience.
         </span>
       </label>
 
       <button
         type="submit"
-        className="border border-ink bg-ink px-6 py-2.5 text-sm font-medium text-white hover:bg-ink/90 transition-colors"
+        disabled={submitting}
+        className="border border-ink bg-ink px-6 py-2.5 text-sm font-medium text-white hover:bg-ink/90 transition-colors disabled:cursor-not-allowed disabled:opacity-60"
       >
-        Submit for review
+        {submitting ? "Sending..." : "Submit for review"}
       </button>
     </form>
   );

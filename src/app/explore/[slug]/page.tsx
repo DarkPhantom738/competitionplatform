@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { getStory } from "@/data/stories";
 import { getCompetition } from "@/data/competitions";
 import { formatDate } from "@/lib/utils";
+import { CommentSection } from "@/components/CommentSection";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -23,24 +24,7 @@ export default async function StoryPage({ params }: Props) {
 
   const competition = getCompetition(story.competitionSlug);
 
-  const sections = [
-    {
-      heading: "What went well",
-      text: "Looking back, the best part wasn't the result — it was how much I learned about working under pressure with people I trusted. There were moments I didn't expect to enjoy, and those ended up mattering more than any award.",
-    },
-    {
-      heading: "What was difficult",
-      text: "Nobody warned me about the time commitment during the school week, or how easy it is to compare yourself to people who seem to have everything figured out. That part was harder than the actual competition.",
-    },
-    {
-      heading: "What I wish I knew",
-      text: "You don't need to have a perfect season to get something meaningful out of this. Starting messy is normal. Finding one person to talk honestly with makes a bigger difference than grinding alone.",
-    },
-    {
-      heading: "Advice for future competitors",
-      text: "Go in curious, not desperate to prove something. Document your process — you'll want to remember how you actually felt, not just how it looked from the outside. And if it's not worth it for you, that's a valid conclusion too.",
-    },
-  ];
+  const sections = story.sections;
 
   return (
     <article>
@@ -71,10 +55,6 @@ export default async function StoryPage({ params }: Props) {
             <p>{section.text}</p>
           </div>
         ))}
-
-        <p className="mt-10 border-t border-border pt-6 text-sm text-ink-faint">
-          Placeholder content — full stories will be published here after moderation.
-        </p>
       </div>
 
       <footer className="article-container border-t border-border pb-12 pt-6">
@@ -92,6 +72,8 @@ export default async function StoryPage({ params }: Props) {
           </Link>
         </p>
       </footer>
+
+      <CommentSection storySlug={slug} />
     </article>
   );
 }
