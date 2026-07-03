@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { CONTACT_EMAIL } from "@/lib/submissions";
 
 export const metadata: Metadata = {
   title: "About",
@@ -48,7 +49,7 @@ export default function AboutPage() {
           <Link href="/submit" className="text-link font-medium">
             Submit a story
           </Link>
-          <a href="mailto:hello@beyondthemedal.org" className="text-link font-medium">
+          <a href={`mailto:${CONTACT_EMAIL}`} className="text-link font-medium">
             Get in touch
           </a>
         </div>

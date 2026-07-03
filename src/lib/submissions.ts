@@ -8,6 +8,7 @@ export const STORY_SECTION_HEADINGS = [
 ] as const;
 
 export const SUBMISSION_EMAIL = "aniket.mangalampalli@gmail.com";
+export const CONTACT_EMAIL = SUBMISSION_EMAIL;
 
 export const SUBMISSION_START = "=== BTM-STORY-SUBMISSION ===";
 export const SUBMISSION_END = "=== END BTM-STORY-SUBMISSION ===";
