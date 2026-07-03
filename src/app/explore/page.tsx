@@ -8,6 +8,12 @@ import { getFeaturedStories } from "@/data/stories";
 export const metadata: Metadata = {
   title: "Explore Stories",
   description: "Browse honest student-written experiences about high school competitions.",
+  openGraph: {
+    title: "Explore Stories",
+    description: "Browse honest student-written experiences about high school competitions.",
+    url: "/explore",
+  },
+  alternates: { canonical: "/explore" },
 };
 
 export default function ExplorePage() {

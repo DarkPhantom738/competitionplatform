@@ -5,6 +5,12 @@ import { CONTACT_EMAIL } from "@/lib/submissions";
 export const metadata: Metadata = {
   title: "About",
   description: "Learn about Beyond the Medal — a student-run archive of honest competition experiences.",
+  openGraph: {
+    title: "About Beyond the Medal",
+    description: "Learn about Beyond the Medal — a student-run archive of honest competition experiences.",
+    url: "/about",
+  },
+  alternates: { canonical: "/about" },
 };
 
 export default function AboutPage() {

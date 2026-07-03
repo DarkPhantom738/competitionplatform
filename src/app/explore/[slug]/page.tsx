@@ -1,20 +1,46 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getStory } from "@/data/stories";
+import { getStory, stories } from "@/data/stories";
 import { getCompetition } from "@/data/competitions";
 import { formatDate } from "@/lib/utils";
 import { CommentSection } from "@/components/CommentSection";
+import { getSiteUrl, SITE_NAME } from "@/lib/site";
 
 interface Props {
   params: Promise<{ slug: string }>;
+}
+
+export async function generateStaticParams() {
+  return stories.map((story) => ({ slug: story.slug }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const story = getStory(slug);
   if (!story) return { title: "Story Not Found" };
-  return { title: story.title, description: story.excerpt };
+
+  const url = `${getSiteUrl()}/explore/${slug}`;
+
+  return {
+    title: story.title,
+    description: story.excerpt,
+    alternates: { canonical: `/explore/${slug}` },
+    openGraph: {
+      type: "article",
+      title: story.title,
+      description: story.excerpt,
+      url,
+      publishedTime: story.publishedAt,
+      authors: [story.authorName],
+      tags: [story.competitionTag, story.domain],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: story.title,
+      description: story.excerpt,
+    },
+  };
 }
 
 export default async function StoryPage({ params }: Props) {
@@ -23,11 +49,31 @@ export default async function StoryPage({ params }: Props) {
   if (!story) notFound();
 
   const competition = getCompetition(story.competitionSlug);
-
   const sections = story.sections;
+
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: story.title,
+    description: story.excerpt,
+    author: { "@type": "Person", name: story.authorName },
+    datePublished: story.publishedAt,
+    publisher: {
+      "@type": "Organization",
+      name: SITE_NAME,
+      url: getSiteUrl(),
+    },
+    mainEntityOfPage: `${getSiteUrl()}/explore/${slug}`,
+    keywords: [story.competitionTag, story.domain, "high school competition"],
+  };
 
   return (
     <article>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+
       <header className="article-container border-b border-border py-10 sm:py-12">
         <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-ink-muted">
           <span>{story.authorName}</span>

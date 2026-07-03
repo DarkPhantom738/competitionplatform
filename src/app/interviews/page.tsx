@@ -7,6 +7,12 @@ import { getFeaturedStories } from "@/data/stories";
 export const metadata: Metadata = {
   title: "Interviews",
   description: "Video interviews with high school students about their competition experiences.",
+  openGraph: {
+    title: "Interviews",
+    description: "Video interviews with high school students about their competition experiences.",
+    url: "/interviews",
+  },
+  alternates: { canonical: "/interviews" },
 };
 
 export default function InterviewsPage() {

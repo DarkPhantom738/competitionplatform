@@ -4,6 +4,12 @@ import { SubmitForm } from "@/components/SubmitForm";
 export const metadata: Metadata = {
   title: "Submit Your Experience",
   description: "Share your honest high school competition experience with future competitors.",
+  openGraph: {
+    title: "Submit Your Experience",
+    description: "Share your honest high school competition experience with future competitors.",
+    url: "/submit",
+  },
+  alternates: { canonical: "/submit" },
 };
 
 export default function SubmitPage() {
