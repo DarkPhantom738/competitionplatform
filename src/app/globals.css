@@ -1,0 +1,72 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-white font-sans text-ink antialiased;
+  }
+}
+
+@layer components {
+  .page-container {
+    @apply mx-auto w-full px-5 sm:px-6 lg:px-8;
+    max-width: min(1400px, 94vw);
+  }
+
+  .article-container {
+    @apply mx-auto px-5 sm:px-6;
+    max-width: 680px;
+  }
+
+  .form-container {
+    @apply mx-auto px-5 sm:px-6;
+    max-width: 672px;
+  }
+
+  .layout-with-sidebar {
+    @apply grid grid-cols-1 gap-10 lg:grid-cols-[1fr_260px] lg:gap-16;
+  }
+
+  .sidebar {
+    @apply lg:sticky lg:top-20 lg:self-start;
+  }
+
+  .article-row {
+    @apply block border-b border-border py-6 transition-colors;
+  }
+
+  .text-link {
+    @apply text-accent underline-offset-2 hover:underline;
+  }
+
+  .tag-plain {
+    @apply text-sm text-ink-muted;
+  }
+
+  .btn-text {
+    @apply text-sm font-medium text-ink hover:text-accent transition-colors;
+  }
+
+  .input-plain {
+    @apply w-full border border-border bg-white px-3 py-2 text-sm text-ink placeholder:text-ink-faint focus:border-ink-muted focus:outline-none;
+  }
+
+  .select-plain {
+    @apply border border-border bg-white px-3 py-2 text-sm text-ink focus:border-ink-muted focus:outline-none;
+  }
+
+  .prose-article p {
+    @apply mb-5 text-lg leading-[1.7] text-ink;
+  }
+
+  .prose-article h2 {
+    @apply mb-4 mt-10 font-serif text-2xl font-semibold text-ink;
+  }
+}
