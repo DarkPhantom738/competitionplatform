@@ -29,11 +29,11 @@ export const stories: Story[] = [
     competitionTag: "AMC",
     domain: "Academics",
     authorName: "Aniket M.",
-    grade: "12",
-    authorGrade: "12th grade",
+    grade: "10",
+    authorGrade: "10th grade",
     excerpt:
       "The amount of time and effort going into the AMC doesn't necessarily translate to the amount of success you'll have. That said, I don't regret it at all.",
-    publishedAt: "2025-11-14",
+    publishedAt: "2025-06-15",
     featured: true,
     readTime: "6 min",
     sections: [
