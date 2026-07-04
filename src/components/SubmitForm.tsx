@@ -1,17 +1,10 @@
 "use client";
 
 import { useState, FormEvent } from "react";
-import type { Domain, Grade } from "@/data/competitions";
-import {
-  buildParsedSubmission,
-  formatSubmissionEmail,
-  SUBMISSION_EMAIL,
-} from "@/lib/submissions";
+import type { Domain } from "@/data/competitions";
 
 export function SubmitForm() {
-  const [formattedSubmission, setFormattedSubmission] = useState<string | null>(null);
-  const [emailSubject, setEmailSubject] = useState("");
-  const [emailSent, setEmailSent] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -22,14 +15,12 @@ export function SubmitForm() {
 
     const form = e.currentTarget;
     const formData = new FormData(form);
-    const grade = String(formData.get("grade") ?? "") as Grade;
-    const domain = String(formData.get("domain") ?? "Academics") as Domain;
 
     const payload = {
       name: String(formData.get("name") ?? ""),
-      grade,
+      grade: String(formData.get("grade") ?? ""),
       competition: String(formData.get("competition") ?? ""),
-      domain,
+      domain: String(formData.get("domain") ?? "Academics") as Domain,
       year: String(formData.get("year") ?? ""),
       role: String(formData.get("role") ?? ""),
       title: String(formData.get("title") ?? ""),
@@ -39,13 +30,6 @@ export function SubmitForm() {
       wishKnew: String(formData.get("wishKnew") ?? ""),
       advice: String(formData.get("advice") ?? ""),
     };
-
-    const submission = buildParsedSubmission({
-      ...payload,
-      role: payload.role || undefined,
-      excerpt: payload.excerpt || undefined,
-    });
-    const email = formatSubmissionEmail(submission);
 
     try {
       const response = await fetch("/api/submit", {
@@ -60,9 +44,7 @@ export function SubmitForm() {
         return;
       }
 
-      setFormattedSubmission(email.text);
-      setEmailSubject(email.subject);
-      setEmailSent(true);
+      setSubmitted(true);
       form.reset();
     } catch {
       setError("Could not reach the server. Try again.");
@@ -71,65 +53,19 @@ export function SubmitForm() {
     }
   }
 
-  if (formattedSubmission) {
-    const mailto = `mailto:${SUBMISSION_EMAIL}?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(formattedSubmission)}`;
-
+  if (submitted) {
     return (
       <div className="py-4">
-        <h3 className="font-serif text-xl font-semibold text-ink">Thanks for sharing</h3>
-        <p className="mt-3 text-sm leading-relaxed text-ink-muted">
-          {emailSent ? (
-            <>
-              Your submission was emailed to{" "}
-              <a href={`mailto:${SUBMISSION_EMAIL}`} className="text-link">
-                {SUBMISSION_EMAIL}
-              </a>
-              . We review every story before publishing.
-            </>
-          ) : (
-            <>
-              Email the formatted submission below to{" "}
-              <a href={`mailto:${SUBMISSION_EMAIL}`} className="text-link">
-                {SUBMISSION_EMAIL}
-              </a>
-              . We review every story before publishing.
-            </>
-          )}
+        <p className="font-serif text-xl font-semibold text-ink">
+          Thank you! Your response has been submitted!
         </p>
-
-        <textarea
-          readOnly
-          value={formattedSubmission}
-          rows={16}
-          className="input-plain mt-6 w-full resize-y font-mono text-xs leading-relaxed"
-        />
-
-        <div className="mt-4 flex flex-wrap gap-3">
-          <button
-            type="button"
-            onClick={() => navigator.clipboard.writeText(formattedSubmission)}
-            className="border border-ink bg-ink px-5 py-2 text-sm font-medium text-white hover:bg-ink/90 transition-colors"
-          >
-            Copy submission
-          </button>
-          <a
-            href={mailto}
-            className="border border-border px-5 py-2 text-sm font-medium text-ink hover:bg-border-light transition-colors"
-          >
-            Open in email app
-          </a>
-          <button
-            type="button"
-            onClick={() => {
-              setFormattedSubmission(null);
-              setEmailSubject("");
-              setEmailSent(false);
-            }}
-            className="px-2 py-2 text-sm text-ink-muted hover:text-ink transition-colors"
-          >
-            Submit another
-          </button>
-        </div>
+        <button
+          type="button"
+          onClick={() => setSubmitted(false)}
+          className="mt-6 text-sm text-ink-muted hover:text-ink transition-colors"
+        >
+          Submit another
+        </button>
       </div>
     );
   }
