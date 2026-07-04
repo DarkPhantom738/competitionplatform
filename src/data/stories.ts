@@ -28,7 +28,7 @@ export const stories: Story[] = [
     competitionSlug: "amc-aime",
     competitionTag: "AMC",
     domain: "Academics",
-    authorName: "Aniket M.",
+    authorName: "James B.",
     grade: "10",
     authorGrade: "10th grade",
     excerpt:

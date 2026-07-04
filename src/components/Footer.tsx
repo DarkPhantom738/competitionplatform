@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { CONTACT_EMAIL } from "@/lib/submissions";
 
 export function Footer() {
   return (
@@ -20,7 +19,7 @@ export function Footer() {
             <Link href="/submit" className="hover:text-ink">Submit</Link>
             <Link href="/explore" className="hover:text-ink">Stories</Link>
             <Link href="/interviews" className="hover:text-ink">Interviews</Link>
-            <a href={`mailto:${CONTACT_EMAIL}`} className="hover:text-ink">Contact</a>
+            <span>Contact</span>
           </div>
         </div>
 
